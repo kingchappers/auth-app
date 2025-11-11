@@ -2,7 +2,7 @@ import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import { StrictMode } from 'react';
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
-import Authentication from "~/authentication/authentication";
+import Authentication from "~/components/authentication/authentication";
 
 export function Welcome() {
 
