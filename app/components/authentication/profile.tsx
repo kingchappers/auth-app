@@ -1,7 +1,49 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { Group, Avatar, Menu, UnstyledButton } from '@mantine/core';
+import { IconChevronRight, IconLogout, IconUser } from '@tabler/icons-react';
+import { forwardRef } from 'react';
 
-const Profile = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+
+interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
+  image: React.ReactNode;
+  name: string;
+  email: string;
+  icon?: React.ReactNode;
+}
+
+const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
+  ({ image, name, email, icon, ...others }: UserButtonProps, ref) =>
+  (
+    <UnstyledButton
+      ref={ref}
+      style={{
+        padding: 'var(--mantine-spacing-md)',
+        color: 'var(--mantine-color-text)',
+        borderRadius: 'var(--mantine-radius-sm)',
+      }}
+      {...others}
+    >
+      <Group>
+        <Avatar radius="xl" />
+
+        <div style={{ flex: 1 }}>
+          <p>
+            {name}
+          </p>
+
+          <p>
+            {email}
+          </p>
+        </div>
+
+        {icon || <IconChevronRight size={16} />}
+      </Group>
+    </UnstyledButton>
+  )
+);
+
+export const Profile = () => {
+  const { user, isAuthenticated, isLoading, logout } = useAuth0();
 
   if (isLoading) {
     return <div className="loading-text">Loading profile...</div>;
@@ -9,30 +51,46 @@ const Profile = () => {
 
   return (
     isAuthenticated && user ? (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-        {user.picture && (
-          <img 
-            src={user.picture} 
-            alt={user.name || 'User'} 
-            className="profile-picture"
-            style={{ 
-              width: '110px', 
-              height: '110px', 
-              borderRadius: '50%', 
-              objectFit: 'cover',
-              border: '3px solid #63b3ed'
-            }}
-          />
-        )}
-        <div style={{ textAlign: 'center' }}>
-          <div className="profile-name" style={{ fontSize: '2rem', fontWeight: '600', color: '#f7fafc', marginBottom: '0.5rem' }}>
-            {user.name}
-          </div>
-          <div className="profile-email" style={{ fontSize: '1.15rem', color: '#a0aec0' }}>
-            {user.email}
-          </div>
-        </div>
-      </div>
+        <Menu withArrow>
+          <Menu.Target>
+            <UnstyledButton>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem'}}>
+                {user.picture && (
+                  <img
+                    src={user.picture}
+                    alt={user.name || 'User'}
+                    className="profile-picture"
+                    style={{
+                      width: '3rem',
+                      height: '3rem',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '3px solid #63b3ed'
+                    }}
+                  />
+                )}
+                <div style={{ textAlign: 'center' }}>
+                  <div className="profile-name" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#f7fafc', marginBottom: '0.1rem' }}>
+                    {user.name}
+                  </div>
+                  <div className="profile-email" style={{ fontSize: '0.6rem', color: '#a0aec0' }}>
+                    {user.email}
+                  </div>
+                </div>
+              </div>
+            </UnstyledButton>
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Label>Application</Menu.Label>
+            <Menu.Item leftSection={<IconUser size={14} />}>
+              Profile
+            </Menu.Item>
+            <Menu.Item onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} component="button" leftSection={<IconLogout size={14} />}>
+              Logout
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
     ) : null
   );
 };
