@@ -12,7 +12,41 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme, virtualColor } from '@mantine/core';
+
+const theme = createTheme({
+  colors: {
+    'slate-950': [
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617"
+    ],
+    'slate-100': [
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9"
+    ],
+    primary: virtualColor({
+      name: 'primary',
+      dark: 'slate-950',
+      light: 'slate-100',
+    }),
+  },
+});
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -33,12 +67,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme="auto" />
         <Meta />
         <Links />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider defaultColorScheme="auto" theme={theme}>{children}</MantineProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

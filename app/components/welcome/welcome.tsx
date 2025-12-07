@@ -1,8 +1,9 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import { StrictMode } from 'react';
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
+import { Auth0Provider } from '@auth0/auth0-react';
 import Authentication from "../authentication/Authentication";
+import { DefaultLayout } from "../layout/DefaultLayout";
 export function Welcome() {
 
   return (
@@ -17,6 +18,10 @@ export function Welcome() {
       >
         <Authentication />
       </Auth0Provider>
+      
+      <DefaultLayout>
+        <p> test </p>
+      </DefaultLayout>
 
       <main className="flex items-center justify-center pt-16 pb-4">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
