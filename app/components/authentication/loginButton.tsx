@@ -5,10 +5,11 @@ import { IconUser } from "@tabler/icons-react";
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
   return (
-    <Button 
-      onClick={() => loginWithRedirect()} 
-      className="button login"
+    <Button
+      onClick={() => loginWithRedirect()}
+      color="text"
       leftSection={<IconUser size={16} />}
+      variant="transparent"
     >
       Log In
     </Button>
