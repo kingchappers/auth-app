@@ -16,34 +16,34 @@ import { ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme, virt
 
 const theme = createTheme({
   colors: {
-    'slate-950': [
-      "#020617",
-      "#020617",
-      "#020617",
-      "#020617",
-      "#020617",
-      "#020617",
-      "#020617",
-      "#020617",
-      "#020617",
-      "#020617"
+    'teal-900': [
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a"
     ],
-    'slate-100': [
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9",
-      "#f1f5f9"
+    'slate-200': [
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4"
     ],
-    primary: virtualColor({
-      name: 'primary',
-      dark: 'slate-950',
-      light: 'slate-100',
+    menu: virtualColor({
+      name: 'menu',
+      dark: 'teal-900',
+      light: 'slate-200',
     }),
   },
 });

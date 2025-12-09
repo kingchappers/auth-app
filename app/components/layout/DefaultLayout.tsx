@@ -17,7 +17,7 @@ export function DefaultLayout({ children }: { children: React.ReactNode }) {
         collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
       }}
     >
-      <AppShell.Header bg="primary">
+      <AppShell.Header bg="menu">
         <Flex mih={50}
           gap="md"
           justify="space-between"
@@ -45,7 +45,7 @@ export function DefaultLayout({ children }: { children: React.ReactNode }) {
         </Flex>
 
       </AppShell.Header>
-      <AppShell.Navbar p="md" bg="primary">
+      <AppShell.Navbar p="md" bg="menu">
         You can collapse the Navbar both on desktop and mobile. After sm breakpoint, the navbar is
         no longer offset by padding in the main element and it takes the full width of the screen
         when opened.
