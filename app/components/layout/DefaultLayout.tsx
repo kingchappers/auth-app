@@ -1,7 +1,9 @@
 import { useDisclosure } from '@mantine/hooks';
-import { AppShell, Burger, Flex, Text } from '@mantine/core';
+import { AppShell, Burger, Flex, Text, NavLink } from '@mantine/core';
 import { Auth0Provider } from '@auth0/auth0-react';
 import Authentication from "../authentication/Authentication";
+import { IconHome2, IconSettings } from '@tabler/icons-react';
+// import { NavLink } from "react-router";
 
 export function DefaultLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
@@ -46,14 +48,14 @@ export function DefaultLayout({ children }: { children: React.ReactNode }) {
 
       </AppShell.Header>
       <AppShell.Navbar p="md" bg="menu">
-        You can collapse the Navbar both on desktop and mobile. After sm breakpoint, the navbar is
-        no longer offset by padding in the main element and it takes the full width of the screen
-        when opened.
+        <NavLink href="/"
+          label="Home"
+          leftSection={<IconHome2 size={16} stroke={1.5} />} />
+        <NavLink href="/test"
+          label="Test"
+          leftSection={<IconSettings size={16} stroke={1.5} />} />
       </AppShell.Navbar>
       <AppShell.Main>
-        <Text>This is the main section, your app content here.</Text>
-        <Text>The navbar is collapsible both on mobile and desktop. Nice!</Text>
-        <Text>Mobile and desktop opened state can be managed separately.</Text>
         {children}
       </AppShell.Main>
     </AppShell>
