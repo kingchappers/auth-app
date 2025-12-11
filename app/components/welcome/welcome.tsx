@@ -9,7 +9,7 @@ export function Welcome() {
   return (
 
     <StrictMode>
-      <Auth0Provider
+      {/* <Auth0Provider
         domain={import.meta.env.VITE_AUTH0_DOMAIN}
         clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
         authorizationParams={{
@@ -17,7 +17,7 @@ export function Welcome() {
         }}
       >
         <Authentication />
-      </Auth0Provider>
+      </Auth0Provider> */}
       
       <DefaultLayout>
         <p> test </p>

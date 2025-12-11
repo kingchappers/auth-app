@@ -54,15 +54,15 @@ export const Profile = () => {
         <Menu withArrow>
           <Menu.Target>
             <UnstyledButton>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem'}}>
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '0.5rem', margin: '0rem' }}>
                 {user.picture && (
                   <img
                     src={user.picture}
                     alt={user.name || 'User'}
                     className="profile-picture"
                     style={{
-                      width: '3rem',
-                      height: '3rem',
+                      width: '2.2rem',
+                      height: '2.2rem',
                       borderRadius: '50%',
                       objectFit: 'cover',
                       border: '3px solid #63b3ed'
