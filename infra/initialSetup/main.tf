@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "assume_role" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:kingchappers/auth-app:ref:refs/head/main"]
+      values   = ["repo:kingchappers/auth-app:ref:refs/heads/main"]
     }
 
     condition {
