@@ -50,8 +50,8 @@ jobs:
     - name: OpenTofu init & plan
       working-directory: infra
       run: |
-        opentofu init
-        opentofu plan -out=tfplan
+        tofu init
+        tofu plan -out=tfplan
 
     - name: Upload tfplan (artifact)
       if: always()
@@ -64,4 +64,4 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       working-directory: infra
       run: |
-        opentofu apply -auto-approve tfplan
+        tofu apply -auto-approve tfplan
