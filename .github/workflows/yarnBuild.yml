@@ -34,7 +34,7 @@ jobs:
         TF_VAR_auth0_domain: ${{ secrets.TF_VAR_AUTH0_DOMAIN }}
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v5.1.1
       with:
         role-to-assume: arn:aws:iam::192350001975:role/github-actions
         aws-region: eu-west-2
