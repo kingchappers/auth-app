@@ -33,7 +33,9 @@ data "aws_iam_policy_document" "assume_role" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:kingchappers/auth-app:ref:refs/heads/main"]
+      # Allow workflows from this repo (branches and PRs). Tighten if you only
+      # want a specific branch (e.g. ref:refs/heads/main).
+      values   = ["repo:kingchappers/auth-app:*"]
     }
 
     condition {
