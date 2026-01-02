@@ -12,7 +12,70 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme, virtualColor } from '@mantine/core';
+
+const theme = createTheme({
+  colors: {
+    'teal-900': [
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a",
+      "#134e4a"
+    ],
+    'teal-200': [
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4",
+      "#99f6e4"
+    ],
+    'slate-950': [
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617",
+      "#020617"
+    ],
+    'slate-100': [
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9",
+      "#f1f5f9"
+    ],
+    menu: virtualColor({
+      name: 'menu',
+      dark: 'teal-900',
+      light: 'teal-200',
+    }),
+    text: virtualColor({
+      name: 'text',
+      dark: 'slate-100',
+      light: 'slate-950',
+    }),
+  },
+});
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -33,12 +96,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme="auto" />
         <Meta />
         <Links />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider defaultColorScheme="auto" theme={theme}>{children}</MantineProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
