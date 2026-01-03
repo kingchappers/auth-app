@@ -14,6 +14,10 @@ permissions:
 
 jobs:
   build_package:
+    env:
+        TF_VAR_AUTH0_CLIENT_ID: ${{ secrets.TF_VAR_AUTH0_CLIENT_ID }}
+        TF_VAR_AUTH0_DOMAIN: ${{ secrets.TF_VAR_AUTH0_DOMAIN }}
+        
     name: Build Package
     runs-on: ubuntu-latest
     strategy:
@@ -31,10 +35,6 @@ jobs:
     - run: yarn install
     - run: yarn run build
     # - run: yarn test
-
-      env:
-        TF_VAR_AUTH0_CLIENT_ID: ${{ secrets.TF_VAR_AUTH0_CLIENT_ID }}
-        TF_VAR_AUTH0_DOMAIN: ${{ secrets.TF_VAR_AUTH0_DOMAIN }}
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v5.1.1
