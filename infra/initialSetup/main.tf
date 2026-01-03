@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "iam_policy" {
+data "aws_iam_policy_document" "github_iam_policy_document" {
   statement {
     actions = [
       "apigateway:GET",
@@ -74,11 +74,18 @@ data "aws_iam_policy_document" "iam_policy" {
       "s3:DeleteObject",
       "s3:GetObject",
       "s3:PutObject",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:HeadObject"
     ]
     effect    = "Allow"
     resources = ["*"]
   }
+}
+
+resource "aws_iam_policy" "github_actions_iam_policy" {
+  name        = "github-actions-iam-policy"
+  description = "A policy to allow GitHub Actions to deploy to AWS for the auth-app project."
+  policy      = data.aws_iam_policy_document.github_iam_policy_document.json
 }
 
 resource "aws_iam_openid_connect_provider" "github_actions" {
@@ -89,4 +96,9 @@ resource "aws_iam_openid_connect_provider" "github_actions" {
 resource "aws_iam_role" "github_actions_role" {
   name               = "github-actions"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_role_policy_attach" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = aws_iam_policy.github_actions_iam_policy.arn
 }
