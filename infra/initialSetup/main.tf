@@ -50,6 +50,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
   statement {
     actions = [
       "apigateway:GET",
+      "apigateway:POST",
       "iam:AttachRolePolicy",
       "iam:CreateRole",
       "iam:DeleteRolePolicy",
@@ -63,12 +64,14 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
       "lambda:DeleteFunction",
       "lambda:UpdateFunction",
       "lambda:GetFunction",
+      "lambda:TagResource",
       "logs:CreateLogGroup",
       "logs:DeleteLogGroup",
       "logs:DeleteRetentionPolicy",
       "logs:DescribeLogGroups",
       "logs:ListTagsForResource",
       "logs:PutRetentionPolicy",
+      "logs:TagResource",
       "s3:CreateBucket",
       "s3:DeleteBucket",
       "s3:DeleteObject",
