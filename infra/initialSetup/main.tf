@@ -51,6 +51,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
     actions = [
       "apigateway:GET",
       "apigateway:POST",
+      "apigateway:TagResource",
       "iam:AttachRolePolicy",
       "iam:CreateRole",
       "iam:DeleteRolePolicy",
@@ -65,6 +66,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
       "lambda:UpdateFunction",
       "lambda:GetFunction",
       "lambda:TagResource",
+      "lambda:ListVersionsByFunction",
       "logs:CreateLogGroup",
       "logs:DeleteLogGroup",
       "logs:DeleteRetentionPolicy",
