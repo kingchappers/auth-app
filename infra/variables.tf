@@ -24,12 +24,12 @@ variable "environment" {
 ############## Variables from Claude Agent, reviewing ##############
 ####################################################################
 
-variable "auth0_domain" {
+variable "tf_var_auth0_domain" {
   type        = string
   description = "Auth0 domain"
 }
 
-variable "auth0_client_id" {
+variable "tf_var_auth0_client_id" {
   type        = string
   description = "Auth0 client ID"
   sensitive   = true
