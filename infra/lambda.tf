@@ -44,8 +44,8 @@ resource "aws_lambda_function" "app" {
   environment {
     variables = {
       NODE_ENV                = "production"
-      VITE_AUTH0_DOMAIN       = var.TF_VAR_AUTH0_DOMAIN
-      VITE_AUTH0_CLIENT_ID    = var.TF_VAR_AUTH0_CLIENT_ID
+      VITE_AUTH0_DOMAIN       = var.auth0_domain
+      VITE_AUTH0_CLIENT_ID    = var.auth0_client_id
     }
   }
 
