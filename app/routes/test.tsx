@@ -1,5 +1,13 @@
-import { Welcome } from "../welcome/welcome";
+import { StrictMode } from "react";
+import { DefaultLayout } from "../components/layout/DefaultLayout";
+import { Text } from '@mantine/core';
 
 export default function Home() {
-    return <p>The test has worked and you've created a new route to a test page under /test</p>
+    return (
+        <StrictMode>
+            <DefaultLayout>
+                <Text>The test has worked and you've created a new route to a test page under /test</Text>
+            </DefaultLayout>
+        </StrictMode>
+    );
 }
