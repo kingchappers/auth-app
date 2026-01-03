@@ -67,6 +67,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
       "lambda:GetFunction",
       "lambda:TagResource",
       "lambda:ListVersionsByFunction",
+      "lambda:GetFunctionCodeSigningConfig",
       "logs:CreateLogGroup",
       "logs:DeleteLogGroup",
       "logs:DeleteRetentionPolicy",
