@@ -49,9 +49,27 @@ jobs:
 
     - name: OpenTofu init & plan
       working-directory: infra
+      env:
+        TF_INPUT: 'false'
+        TF_IN_AUTOMATION: 'true'
+        TF_LOG: 'DEBUG'
+        TF_LOG_PATH: 'infra/opentofu.init.log'
+      timeout-minutes: 15
       run: |
+        echo "=== pre-init diagnostics ==="
+        tofu version
+        curl -I https://registry.opentofu.org || true
+        curl -I https://releases.opentofu.org || true
+        echo "=== run init and plan ==="
         tofu init
         tofu plan -out=tfplan
+  
+    - name: Upload debug logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: tofu-logs
+        path: tofu-debug.log
 
     - name: Upload tfplan (artifact)
       if: always()
