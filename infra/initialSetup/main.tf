@@ -7,9 +7,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket = var.state_bucket
-    key    = "auth-app-infra-setup/terraform.tfstate"
-    region = var.aws_region
+    bucket       = var.state_bucket
+    key          = "auth-app-infra-setup/terraform.tfstate"
+    region       = var.aws_region
     use_lockfile = true
   }
 }
@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "assume_role" {
       variable = "token.actions.githubusercontent.com:sub"
       # Allow workflows from this repo (branches and PRs). Tighten if you only
       # want a specific branch (e.g. ref:refs/heads/main).
-      values   = ["repo:kingchappers/auth-app:*"]
+      values = ["repo:kingchappers/auth-app:*"]
     }
 
     condition {
@@ -65,6 +65,8 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
       "lambda:DeleteFunction",
       "lambda:UpdateFunction",
       "lambda:GetFunction",
+      "lambda:GetPolicy",
+      "lambda:UpdateFunctionConfiguration",
       "lambda:TagResource",
       "lambda:ListVersionsByFunction",
       "lambda:GetFunctionCodeSigningConfig",
@@ -72,11 +74,16 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
       "lambda:RemovePermission",
       "logs:CreateLogGroup",
       "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
       "logs:DeleteLogGroup",
       "logs:DeleteRetentionPolicy",
       "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
       "logs:ListTagsForResource",
       "logs:PutRetentionPolicy",
+      "logs:PutLogEvents",
+      "logs:GetLogEvents",
+      "logs:FilterLogEvents",
       "logs:TagResource",
       "s3:CreateBucket",
       "s3:DeleteBucket",

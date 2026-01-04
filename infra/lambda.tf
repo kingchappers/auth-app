@@ -34,18 +34,18 @@ data "archive_file" "lambda_zip" {
 resource "aws_lambda_function" "app" {
   filename         = data.archive_file.lambda_zip.output_path
   function_name    = var.app_name
-  role            = aws_iam_role.lambda_role.arn
-  handler         = "server/index.handler"
-  runtime         = "nodejs24.x"
-  timeout         = 30
-  memory_size     = 512
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "server/index.handler"
+  runtime          = "nodejs24.x"
+  timeout          = 30
+  memory_size      = 512
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   environment {
     variables = {
-      NODE_ENV                = "production"
-      VITE_AUTH0_DOMAIN       = var.auth0_domain
-      VITE_AUTH0_CLIENT_ID    = var.auth0_client_id
+      NODE_ENV             = "production"
+      VITE_AUTH0_DOMAIN    = var.auth0_domain
+      VITE_AUTH0_CLIENT_ID = var.auth0_client_id
     }
   }
 
@@ -61,11 +61,11 @@ resource "aws_apigatewayv2_api" "app" {
   protocol_type = "HTTP"
 
   cors_configuration {
-    allow_origins     = ["*"]
-    allow_methods     = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
-    allow_headers     = ["*"]
-    expose_headers    = ["*"]
-    max_age          = 300
+    allow_origins  = ["*"]
+    allow_methods  = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
+    allow_headers  = ["*"]
+    expose_headers = ["*"]
+    max_age        = 300
   }
 
   tags = {
@@ -75,12 +75,12 @@ resource "aws_apigatewayv2_api" "app" {
 
 # Integration between API Gateway and Lambda
 resource "aws_apigatewayv2_integration" "lambda" {
-  api_id           = aws_apigatewayv2_api.app.id
-  integration_type = "AWS_PROXY"
-  integration_method = "POST"
+  api_id                 = aws_apigatewayv2_api.app.id
+  integration_type       = "AWS_PROXY"
+  integration_method     = "POST"
   payload_format_version = "2.0"
-  integration_uri = aws_lambda_function.app.invoke_arn
-  description = "Lambda integration for ${var.app_name}"
+  integration_uri        = aws_lambda_function.app.invoke_arn
+  description            = "Lambda integration for ${var.app_name}"
 }
 
 # Route all requests to Lambda
@@ -95,10 +95,10 @@ resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.app.id
   name        = "$default"
   auto_deploy = true
-  
+
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_logs.arn
-    format         = "$context.requestId"
+    format          = "$context.requestId"
   }
 
   tags = {
