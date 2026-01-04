@@ -116,6 +116,30 @@ resource "aws_cloudwatch_log_group" "api_logs" {
   }
 }
 
+# Grant API Gateway permission to create log streams and put log events
+# into the `api_logs` log group. Without this resource policy API Gateway
+# may fail with "Insufficient permissions to enable logging" when creating
+# the $default stage.
+resource "aws_cloudwatch_log_resource_policy" "apigateway_write" {
+  policy_name = "APIGatewayPushToCloudWatchLogs-${var.app_name}"
+
+  policy_document = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = { Service = "apigateway.amazonaws.com" },
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:CreateLogGroup"
+        ],
+        Resource = "${aws_cloudwatch_log_group.api_logs.arn}:*"
+      }
+    ]
+  })
+}
+
 # Lambda permission to be invoked by API Gateway
 resource "aws_lambda_permission" "api_gateway" {
   statement_id  = "AllowAPIGatewayInvoke"
