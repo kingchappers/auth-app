@@ -51,6 +51,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
     actions = [
       "apigateway:GET",
       "apigateway:POST",
+      "apigateway:PATCH",
       "apigateway:TagResource",
       "iam:AttachRolePolicy",
       "iam:CreateRole",
