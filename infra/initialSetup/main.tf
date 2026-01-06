@@ -64,6 +64,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
       "iam:PutRolePolicy",
       "iam:CreateServiceLinkedRole",
       "iam:ListInstanceProfilesForRole",
+      "iam:UpdateRoleDescription",
       "lambda:CreateFunction",
       "lambda:DeleteFunction",
       "lambda:UpdateFunction",
