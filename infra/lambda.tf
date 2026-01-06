@@ -158,6 +158,36 @@ output "api_endpoint" {
   description = "API Gateway endpoint URL"
 }
 
+# API Gateway account-level configuration: supply a role that allows
+# API Gateway to push logs to CloudWatch. This is required in some
+# accounts/environments where a CloudWatch resource policy is insufficient.
+resource "aws_iam_role" "apigateway_cloudwatch_role" {
+  name = "${var.app_name}-apigw-cw-logs-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "apigateway_push_logs" {
+  role       = aws_iam_role.apigateway_cloudwatch_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+}
+
+# Attach the role to the API Gateway account so API Gateway can assume it
+resource "aws_api_gateway_account" "account" {
+  cloudwatch_role_arn = aws_iam_role.apigateway_cloudwatch_role.arn
+}
+
 ####################################################################
 #### NEXT STEPS:  ##################################################
 ######## 1. Create a CI/CD pipeline to build the react package to auth-app/build #
