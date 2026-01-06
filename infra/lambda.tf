@@ -1,7 +1,8 @@
 # Lambda execution role
 resource "aws_iam_role" "lambda_role" {
-  name = "${var.app_name}-lambda-role"
-
+  # name = "${var.app_name}-lambda-role"
+  name = "auth-starter-app-lambda-role"
+  
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -156,36 +157,6 @@ data "aws_region" "current" {}
 output "api_endpoint" {
   value       = aws_apigatewayv2_stage.default.invoke_url
   description = "API Gateway endpoint URL"
-}
-
-# API Gateway account-level configuration: supply a role that allows
-# API Gateway to push logs to CloudWatch. This is required in some
-# accounts/environments where a CloudWatch resource policy is insufficient.
-resource "aws_iam_role" "apigateway_cloudwatch_role" {
-  name = "${var.app_name}-apigw-cw-logs-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "apigateway.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "apigateway_push_logs" {
-  role       = aws_iam_role.apigateway_cloudwatch_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-}
-
-# Attach the role to the API Gateway account so API Gateway can assume it
-resource "aws_api_gateway_account" "account" {
-  cloudwatch_role_arn = aws_iam_role.apigateway_cloudwatch_role.arn
 }
 
 ####################################################################
