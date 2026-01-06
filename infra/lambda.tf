@@ -1,7 +1,6 @@
 # Lambda execution role
 resource "aws_iam_role" "lambda_role" {
-  # name = "${var.app_name}-lambda-role"
-  name = "auth-starter-app-lambda-role"
+  name = "${var.app_name}-lambda-role"
   
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -15,6 +14,14 @@ resource "aws_iam_role" "lambda_role" {
       }
     ]
   })
+  # Explicit attributes to match provider planned/defaults and avoid
+  # legacy-plugin SDK warnings about non-computed attributes appearing
+  description          = "Role for the Lambda function of the auth-starter-app"
+  max_session_duration = 3600
+  force_detach_policies = false
+  path                 = "/"
+  permissions_boundary = ""
+  tags                 = {}
 }
 
 # Attach basic Lambda execution policy
