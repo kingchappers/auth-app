@@ -50,6 +50,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
   statement {
     actions = [
       "apigateway:GET",
+      "apigateway:UpdateAccount",
       "apigateway:POST",
       "apigateway:PATCH",
       "apigateway:TagResource",
