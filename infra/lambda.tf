@@ -175,3 +175,33 @@ output "api_endpoint" {
 ######## 1. Create a CI/CD pipeline to build the react package to auth-app/build #
 ######## 2. Set auth0_domain and auth0_client_id variables as secrets in AWS and collected by the pipeline #
 ####################################################################
+
+### API Gateway CloudWatch role (conditional)
+# Create the role only when `var.create_apigw_cloudwatch_role` is true.
+resource "aws_iam_role" "apigateway_cloudwatch_role" {
+  name = "${var.app_name}-apigw-cw-logs-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "apigateway_push_logs" {
+  role       = aws_iam_role.apigateway_cloudwatch_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+}
+
+# Configure API Gateway account to use either the created role ARN or an
+# existing role ARN supplied in `var.apigw_cloudwatch_role_arn`.
+resource "aws_api_gateway_account" "account" {
+  cloudwatch_role_arn = aws_iam_role.apigateway_cloudwatch_role.arn
+}
