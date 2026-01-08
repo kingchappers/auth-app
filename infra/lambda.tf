@@ -33,9 +33,8 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 # Archive the build output
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/../build"
-  output_path = "${path.module}/.lambda_build.zip"
-  excludes    = ["node_modules/.cache"]
+  source_dir  = "${path.module}/../build/client"
+  output_path = "${path.module}/lambda_function.zip"
 }
 
 # Lambda function
@@ -43,7 +42,7 @@ resource "aws_lambda_function" "app" {
   filename         = data.archive_file.lambda_zip.output_path
   function_name    = var.app_name
   role             = aws_iam_role.lambda_role.arn
-  handler          = "server/index.handler"
+  handler          = "index.handler"
   runtime          = "nodejs24.x"
   timeout          = 30
   memory_size      = 512
