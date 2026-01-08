@@ -64,6 +64,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
       "iam:PassRole",
       "iam:PutRolePolicy",
       "iam:CreatePolicy",
+      "iam:GetPolicy",
       "iam:CreateServiceLinkedRole",
       "iam:ListInstanceProfilesForRole",
       "iam:UpdateRoleDescription",
