@@ -98,7 +98,7 @@ resource "aws_apigatewayv2_integration" "lambda" {
 # Route all requests to Lambda
 resource "aws_apigatewayv2_route" "default" {
   api_id    = aws_apigatewayv2_api.app.id
-  route_key = "$DEFAULT"
+  route_key = "$default"
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
