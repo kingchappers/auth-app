@@ -205,3 +205,27 @@ resource "aws_iam_role_policy_attachment" "apigateway_push_logs" {
 resource "aws_api_gateway_account" "account" {
   cloudwatch_role_arn = aws_iam_role.apigateway_cloudwatch_role.arn
 }
+
+data "aws_iam_policy_document" "apiGateway_iam_policy_document" {
+  statement {
+    actions = [
+      "apigateway:GET",
+      "apigateway:UpdateAccount",
+      "iam:GetRole",
+      "iam:PassRole"
+    ]
+    effect    = "Allow"
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "apiGateway_iam_policy" {
+  name        = "apiGateway-iam-policy"
+  description = "A policy to allow API Gateway to access AWS resources for the auth-app project."
+  policy      = data.aws_iam_policy_document.apiGateway_iam_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "apiGateway_role_policy_attach" {
+  role       = aws_iam_role.apigateway_cloudwatch_role.name
+  policy_arn = aws_iam_policy.apiGateway_iam_policy.arn
+}
