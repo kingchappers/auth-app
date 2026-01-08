@@ -34,8 +34,8 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/../build"
-  output_path = "${path.module}/.lambda_build.zip"
-  excludes    = ["node_modules/.cache"]
+  output_path = "${path.module}/lambda_function.zip"
+  excludes    = ["client"]
 }
 
 # Lambda function
