@@ -32,7 +32,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
     - run: yarn install
-    - run: yarn run build
+    - name: Build app with Auth0 config
+      env:
+        VITE_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+        VITE_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+      run: yarn run build
     # - run: yarn test
 
     - name: Configure AWS Credentials
