@@ -22,23 +22,28 @@ if (fs.existsSync(apiHandlerPath)) {
   fs.renameSync(apiHandlerPath, indexPath);
 }
 
-// Copy only the required node_modules for Lambda
-const nodeModulesDir = path.join(__dirname, '../build/api/node_modules');
-if (!fs.existsSync(nodeModulesDir)) {
-  fs.mkdirSync(nodeModulesDir, { recursive: true });
+// Create a minimal package.json for npm install to get all dependencies
+const packageJsonPath = path.join(apiBuildDir, 'package.json');
+const packageJson = {
+  name: 'auth-app-api',
+  version: '1.0.0',
+  dependencies: {
+    'jsonwebtoken': '^9.0.3',
+    'jwks-rsa': '^3.2.1'
+  }
+};
+fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
+// Install dependencies in build/api
+console.log('Installing Lambda dependencies...');
+execSync('npm install --production', { cwd: apiBuildDir, stdio: 'inherit' });
+
+// Clean up package.json and package-lock.json (not needed in Lambda)
+fs.unlinkSync(packageJsonPath);
+const lockFilePath = path.join(apiBuildDir, 'package-lock.json');
+if (fs.existsSync(lockFilePath)) {
+  fs.unlinkSync(lockFilePath);
 }
 
-const requiredModules = ['jsonwebtoken', 'jwks-rsa'];
-const sourceNodeModules = path.join(__dirname, '../node_modules');
-
-requiredModules.forEach(module => {
-  const source = path.join(sourceNodeModules, module);
-  const dest = path.join(nodeModulesDir, module);
-  if (fs.existsSync(source)) {
-    // Copy module recursively
-    execSync(`cp -r "${source}" "${dest}"`, { stdio: 'inherit' });
-  }
-});
-
 console.log('✓ API handler compiled to build/api/index.js');
-console.log('✓ Dependencies copied to build/api/node_modules/');
+console.log('✓ Dependencies installed to build/api/node_modules/');
