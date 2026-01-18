@@ -15,6 +15,13 @@ execSync(
   { cwd: path.join(__dirname, '..'), stdio: 'inherit' }
 );
 
+// Rename api-handler.js to index.js so Lambda can find it with handler "index.handler"
+const apiHandlerPath = path.join(apiBuildDir, 'api-handler.js');
+const indexPath = path.join(apiBuildDir, 'index.js');
+if (fs.existsSync(apiHandlerPath)) {
+  fs.renameSync(apiHandlerPath, indexPath);
+}
+
 // Copy only the required node_modules for Lambda
 const nodeModulesDir = path.join(__dirname, '../build/api/node_modules');
 if (!fs.existsSync(nodeModulesDir)) {
@@ -33,5 +40,5 @@ requiredModules.forEach(module => {
   }
 });
 
-console.log('✓ API handler compiled to build/api/');
+console.log('✓ API handler compiled to build/api/index.js');
 console.log('✓ Dependencies copied to build/api/node_modules/');
