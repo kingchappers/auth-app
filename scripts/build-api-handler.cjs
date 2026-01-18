@@ -11,10 +11,27 @@ if (!fs.existsSync(apiBuildDir)) {
 // Compile TypeScript handler to JavaScript
 console.log('Compiling API handler...');
 execSync(
-  'tsc api-handler.ts --outDir build/api --module commonjs --skipLibCheck --target es2020 --resolveJsonModule',
+  'tsc api-handler.ts --outDir build/api --module commonjs --skipLibCheck --target es2020 --resolveJsonModule --esModuleInterop',
   { cwd: path.join(__dirname, '..'), stdio: 'inherit' }
 );
 
-// Copy node_modules needed for the Lambda (jsonwebtoken, jwks-rsa)
-// In production, you'd use a bundler like esbuild, but for simplicity we'll rely on the full node_modules
+// Copy only the required node_modules for Lambda
+const nodeModulesDir = path.join(__dirname, '../build/api/node_modules');
+if (!fs.existsSync(nodeModulesDir)) {
+  fs.mkdirSync(nodeModulesDir, { recursive: true });
+}
+
+const requiredModules = ['jsonwebtoken', 'jwks-rsa'];
+const sourceNodeModules = path.join(__dirname, '../node_modules');
+
+requiredModules.forEach(module => {
+  const source = path.join(sourceNodeModules, module);
+  const dest = path.join(nodeModulesDir, module);
+  if (fs.existsSync(source)) {
+    // Copy module recursively
+    execSync(`cp -r "${source}" "${dest}"`, { stdio: 'inherit' });
+  }
+});
+
 console.log('✓ API handler compiled to build/api/');
+console.log('✓ Dependencies copied to build/api/node_modules/');

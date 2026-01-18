@@ -40,7 +40,7 @@ export function DefaultLayout({ children }: { children: React.ReactNode }) {
               clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
               authorizationParams={{
                 redirect_uri: window.location.origin,
-                audience: `${import.meta.env.VITE_AUTH0_AUDIENCE}/api/v2/`,
+                audience: `${import.meta.env.VITE_AUTH0_AUDIENCE}`,
               }}
             >
               <Authentication />
