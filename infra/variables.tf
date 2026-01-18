@@ -34,3 +34,7 @@ variable "auth0_client_id" {
   description = "Auth0 client ID"
   sensitive   = true
 }
+variable "auth0_audience" {
+  type        = string
+  description = "Auth0 API audience identifier"
+}

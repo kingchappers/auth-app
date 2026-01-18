@@ -2,6 +2,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { AppShell, Burger, Flex, Text, NavLink } from '@mantine/core';
 import { Auth0Provider } from '@auth0/auth0-react';
 import Authentication from "../authentication/Authentication";
+import { ApiTest } from '../api/ApiTest';
 import { IconHome2, IconSettings } from '@tabler/icons-react';
 // import { NavLink } from "react-router";
 
@@ -38,7 +39,8 @@ export function DefaultLayout({ children }: { children: React.ReactNode }) {
               domain={import.meta.env.VITE_AUTH0_DOMAIN}
               clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
               authorizationParams={{
-                redirect_uri: window.location.origin
+                redirect_uri: window.location.origin,
+                audience: `${import.meta.env.VITE_AUTH0_AUDIENCE}`,
               }}
             >
               <Authentication />
@@ -55,8 +57,22 @@ export function DefaultLayout({ children }: { children: React.ReactNode }) {
           label="Test"
           leftSection={<IconSettings size={16} stroke={1.5} />} />
       </AppShell.Navbar>
+
       <AppShell.Main>
         {children}
+        <div style={{ marginTop: '2rem' }}>
+          <Auth0Provider
+            domain={import.meta.env.VITE_AUTH0_DOMAIN}
+            clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+            authorizationParams={{
+              redirect_uri: window.location.origin,
+              audience: import.meta.env.VITE_AUTH0_AUDIENCE
+            }}
+          >
+            <ApiTest />
+          </Auth0Provider>
+          
+        </div>
       </AppShell.Main>
     </AppShell>
   );
