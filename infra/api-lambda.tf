@@ -14,7 +14,7 @@ resource "aws_lambda_function" "api" {
   filename         = data.archive_file.api_lambda_zip.output_path
   function_name    = "${var.app_name}-api"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "index.handler"
+  handler          = "api-handler.handler"
   runtime          = "nodejs24.x"
   timeout          = 30
   memory_size      = 512
