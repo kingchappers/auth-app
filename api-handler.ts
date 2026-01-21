@@ -12,34 +12,49 @@ const client = jwksClient({
   jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
 });
 
-async function getKey(header: any) {
-  const key = await client.getSigningKey(header.kid);
-  return key.getPublicKey();
+// Synchronous wrapper for getKey that works with jwt.verify callback
+function getKey(header: any, callback: any) {
+  client.getSigningKey(header.kid, (err, key) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, key?.getPublicKey());
+    }
+  });
 }
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   try {
+    console.log('Received event:', JSON.stringify(event, null, 2));
+
     // Extract token from Authorization header
-    const authHeader = event.headers.authorization || '';
+    const authHeader = event.headers?.authorization || '';
+    console.log('Auth header:', authHeader);
+    
     const token = authHeader.replace('Bearer ', '');
 
     if (!token) {
+      console.log('No token found');
       return {
         statusCode: 401,
         body: JSON.stringify({ error: 'Missing authorization token' }),
       };
     }
 
-    // Verify and decode JWT
-    const decoded = await new Promise((resolve, reject) => {
+    // Verify and decode JWT using Promise wrapper
+    const decoded: any = await new Promise((resolve, reject) => {
       verify(token, getKey, { audience: AUTH0_AUDIENCE }, (err, decoded) => {
-        if (err) reject(err);
-        else resolve(decoded);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(decoded);
+        }
       });
     });
 
     // Route requests based on path
     const path = event.rawPath;
+    console.log('Path:', path);
 
     if (path === '/api/test') {
       return handleTestEndpoint(decoded);
@@ -55,10 +70,13 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       body: JSON.stringify({ error: 'Endpoint not found' }),
     };
   } catch (error) {
-    console.error('Authentication error:', error);
+    console.error('Unhandled error:', error);
     return {
       statusCode: 401,
-      body: JSON.stringify({ error: 'Unauthorized' }),
+      body: JSON.stringify({ 
+        error: 'Unauthorized',
+        details: error instanceof Error ? error.message : String(error)
+      }),
     };
   }
 };
@@ -81,8 +99,8 @@ function handleUserInfo(decoded: any) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       userId: decoded.sub,
-      email: decoded[`${process.env.AUTH0_DOMAIN}/email`] || decoded.email,
-      name: decoded[`${process.env.AUTH0_DOMAIN}/name`] || decoded.name,
+      email: decoded[`${AUTH0_DOMAIN}/email`] || decoded.email,
+      name: decoded[`${AUTH0_DOMAIN}/name`] || decoded.name,
     }),
   };
 }
