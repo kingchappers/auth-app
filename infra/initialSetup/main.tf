@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket       = var.state_bucket
-    key          = "auth-app-infra-setup/terraform.tfstate"
+    key          = "${var.app_name}-infra-setup/terraform.tfstate"
     region       = var.aws_region
     use_lockfile = true
   }
@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "assume_role" {
       variable = "token.actions.githubusercontent.com:sub"
       # Allow workflows from this repo (branches and PRs). Tighten if you only
       # want a specific branch (e.g. ref:refs/heads/main).
-      values = ["repo:kingchappers/auth-app:*"]
+      values = ["repo:kingchappers/${var.app_name}:*"]
     }
 
     condition {
